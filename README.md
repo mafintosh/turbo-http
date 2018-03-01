@@ -66,6 +66,10 @@ you should copy it.
 
 Called when the request is fully read.
 
+## Acknowledgements
+
+This project was kindly sponsored by [nearForm](http://nearform.com).
+
 ## License
 
 MIT
