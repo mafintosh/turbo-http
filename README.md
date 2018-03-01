@@ -57,7 +57,7 @@ Request url
 
 Request method
 
-#### `req.ondata(buffer, start, length)
+#### `req.ondata(buffer, start, length)`
 
 Called when there is data read. If you use the buffer outside of this function
 you should copy it.
