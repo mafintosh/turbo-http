@@ -1,6 +1,6 @@
 # turbo-http
 
-A low level http library for Node.js based on [turbo-net](https://gitub.com/mafintosh/turbo-http)
+A low level http library for Node.js based on [turbo-net](https://github.com/mafintosh/turbo-net)
 
 ```
 npm install turbo-http
