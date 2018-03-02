@@ -37,7 +37,7 @@ class Request {
 }
 
 class Response {
-  constructor (socket, headers) {
+  constructor (server, socket, headers) {
     this.socket = socket
     this.statusCode = 200
     this.headerSent = false
@@ -46,6 +46,8 @@ class Response {
     this._headersLength = 0
     this._keepAlive = true
     this._chunked = true
+    this._reuseChunkHeader = server._reuseChunkHeader
+    this._reuseChunk = server._reuseChunk
   }
 
   setHeader (name, value) {
@@ -108,13 +110,13 @@ class Response {
     this._flushHeaders()
 
     const status = httpStatus[this.statusCode]
-    const chunkHeader = Buffer.alloc(10)
+    const chunkHeader = this.server._allocSmall()
     const chunkHeaderLength = encodeHex(addAll(ns), chunkHeader)
 
     this.socket.writev(
       [status, this._headers, chunkHeader].concat(bufs, EOL_BUFFER),
       [status.length, this._headersLength + 2, chunkHeaderLength].concat(ns, 2),
-      cb
+      cb || this._reuseChunkHeader
     )
   }
 
@@ -122,13 +124,13 @@ class Response {
     this._flushHeaders()
 
     const status = httpStatus[this.statusCode]
-    const chunkHeader = Buffer.alloc(10)
+    const chunkHeader = this.server._allocSmall()
     const chunkHeaderLength = encodeHex(n, chunkHeader)
 
     this.socket.writev(
       [status, this._headers, chunkHeader, buf, EOL_BUFFER],
       [status.length, this._headersLength + 2, chunkHeaderLength, n, 2],
-      cb
+      cb || this._reuseChunkHeader
     )
   }
 
@@ -163,18 +165,18 @@ class Response {
   }
 
   _writeChunk (buf, n, cb) {
-    const header = Buffer.alloc(10)
+    const header = this.server._allocSmall()
     const headerLength = encodeHex(n, header)
 
     this.socket.writev(
       [header, buf, EOL_BUFFER],
       [headerLength, n, 2],
-      cb
+      cb || this._reuseChunk
     )
   }
 
   _writeChunkv (bufs, ns, cb) {
-    const header = Buffer.alloc(10)
+    const header = this.server._allocSmall()
     const headerLength = encodeHex(addAll(ns), header)
 
     this.socket.writev(
@@ -207,7 +209,7 @@ class Response {
     }
 
     if (this._chunked) {
-      const header = Buffer.alloc(10)
+      const header = this.server._allocSmall()
       const headerLength = encodeHex(addAll(ns), header)
       this.socket.writev(
         [header].concat(bufs, LAST_CHUNK_AFTER_DATA),
@@ -232,7 +234,7 @@ class Response {
 
     if (this._chunked) {
       if (n) {
-        const header = Buffer.alloc(10)
+        const header = this.server._allocSmall()
         const headerLength = encodeHex(n, header)
         this.socket.writev(
           [header, buf, LAST_CHUNK_AFTER_DATA],
@@ -261,6 +263,10 @@ class Server extends turbo.Server {
   constructor () {
     super()
     this._pool = []
+    this._smallPool = []
+    this._reuseChunkHeader = (_, bufs) => this._smallPool.push(bufs[2])
+    this._reuseChunk = (_, bufs) => this._smallPool.push(bufs[0])
+
     this.on('connection', this._onhttpconnection)
   }
 
@@ -282,7 +288,7 @@ class Server extends turbo.Server {
 
     function onhead (opts) {
       req = new Request(socket, opts)
-      res = new Response(socket, headers)
+      res = new Response(self, socket, headers)
       self.emit('request', req, res)
     }
 
@@ -307,6 +313,10 @@ class Server extends turbo.Server {
 
   _alloc () {
     return this._pool.pop() || Buffer.allocUnsafe(65536)
+  }
+
+  _allocSmall () {
+    return this._smallPool.pop() || Buffer.allocUnsafe(32)
   }
 }
 
