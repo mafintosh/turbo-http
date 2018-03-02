@@ -3,7 +3,7 @@
 A low level http library for Node.js based on [turbo-net](https://github.com/mafintosh/turbo-net)
 
 ```
-npm install @mafintosh/turbo-http
+npm install turbo-http
 ```
 
 WIP, this module is already *really* fast but there are some HTTP features
@@ -14,7 +14,7 @@ On my laptop I can serve simple hello world payloads at around 100k requests/sec
 ## Usage
 
 ``` js
-const turbo = require('@mafintosh/turbo-http')
+const turbo = require('turbo-http')
 
 const server = turbo.createServer(function (req, res) {
   res.setHeader('Content-Length', '11')

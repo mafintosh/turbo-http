@@ -1,5 +1,5 @@
 {
-  "name": "@mafintosh/turbo-http",
+  "name": "turbo-http",
   "version": "0.1.1",
   "description": "Blazing fast low level http server",
   "main": "index.js",

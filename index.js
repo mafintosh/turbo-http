@@ -262,6 +262,7 @@ function encodeHex (n, buf) {
 class Server extends turbo.Server {
   constructor () {
     super()
+
     this._pool = []
     this._smallPool = []
     this._reuseChunkHeader = (_, bufs) => this._smallPool.push(bufs[2])
