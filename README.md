@@ -17,7 +17,6 @@ On my laptop I can serve simple hello world payloads at around 100k requests/sec
 const turbo = require('turbo-http')
 
 const server = turbo.createServer(function (req, res) {
-  res.setStatus(200, 'OK')
   res.setHeader('Content-Length', '11')
   res.write(Buffer.from('hello world'))
 })
@@ -35,7 +34,7 @@ Create a new http server. Inherits from [the turbo-net tcp server](https://githu
 
 Emitted when a new http request is received.
 
-#### `res.setStatus(code, msg)`
+#### `res.statusCode = code`
 
 Set the http status
 
@@ -49,6 +48,14 @@ Write a buffer. When the callback is called, the buffer
 has been *completely* flushed to the underlying socket and is safe to
 reuse for other purposes
 
+#### `res.writev(buffers, [lengths], [callback])`
+
+Write more that one buffer at once.
+
+#### `res.end([buf], [length], [callback]`)
+
+End the request. Only needed if you do not provide a `Content-Length`.
+
 #### `req.url`
 
 Request url
@@ -56,6 +63,14 @@ Request url
 #### `req.method`
 
 Request method
+
+#### `value = req.getHeader(name)`
+
+Get a request header.
+
+#### `headers = req.getAllHeaders()`
+
+Get all request headers as a map.
 
 #### `req.ondata(buffer, start, length)`
 
