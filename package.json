@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "http-parser-js": "^0.4.10",
-    "turbo-net": "^1.0.1"
+    "turbo-net": "^1.2.1"
   },
   "devDependencies": {},
   "repository": {
