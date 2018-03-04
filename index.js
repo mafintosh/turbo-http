@@ -32,7 +32,7 @@ class Request {
   }
 
   getHeader (name) {
-    this.getAllHeaders().get(name)
+    return this._headers && this._headers.get(name) || this.getAllHeaders().get(name)
   }
 }
 
