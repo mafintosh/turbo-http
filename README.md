@@ -42,6 +42,10 @@ Set the http status
 
 Set a http header
 
+#### `res.setHeaders({ name1: value1, name2: value2,... })`
+
+Set more http headers
+
 #### `res.write(buf, [length], [callback])`
 
 Write a buffer. When the callback is called, the buffer

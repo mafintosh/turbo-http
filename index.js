@@ -65,6 +65,12 @@ class Response {
     else if (CONNECTION.test(name)) this._keepAlive = false
   }
 
+  setHeaders (obj) {
+    Object.keys(obj).map(key => {
+      this.setHeader(key, obj[key])
+    })
+  }
+
   _appendHeader (buf) {
     // slow path but very unlikely (a *lot* of headers)
     if (this._headersLength + buf.length > 65534) {
