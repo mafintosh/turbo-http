@@ -135,7 +135,7 @@ class Response {
   }
 
   write (buf, n, cb) {
-    if (typeof buf === 'string') buf = Buffer.from(buf, 'utf8')
+    if (typeof buf === 'string') buf = Buffer.from(buf)
     if (typeof n === 'function') this._write(buf, buf.length, n)
     else this._write(buf, n || buf.length, cb)
   }
@@ -193,7 +193,7 @@ class Response {
   }
 
   end (buf, n, cb) {
-    if (typeof buf === 'string') buf = Buffer.from(buf, 'utf8')
+    if (typeof buf === 'string') buf = Buffer.from(buf)
     if (!buf) this._end(EMPTY, 0, undefined)
     else if (typeof buf === 'function') this._end(EMPTY, 0, buf)
     else if (typeof n === 'function') this._end(buf, buf.length, n)
