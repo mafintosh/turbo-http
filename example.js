@@ -1,6 +1,6 @@
 const turbo = require('./')
 
-const hello = Buffer.from('hello world\n')
+const hello = 'hello world\n'
 
 turbo.createServer(function (req, res) {
   res.setHeader('Content-Length', hello.length)
