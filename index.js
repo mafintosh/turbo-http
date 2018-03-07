@@ -32,7 +32,7 @@ class Request {
   }
 
   getHeader (name) {
-    return this._headers && this._headers.get(name) || this.getAllHeaders().get(name)
+    return this.getAllHeaders().get(name)
   }
 }
 
@@ -66,7 +66,8 @@ class Response {
   }
 
   setHeaders (obj) {
-    Object.keys(obj).map(key => {
+    const names = Object.keys(obj)
+    names.forEach(key => {
       this.setHeader(key, obj[key])
     })
   }
