@@ -32,7 +32,7 @@ class Request {
   }
 
   getHeader (name) {
-    this.getAllHeaders().get(name)
+    return this.getAllHeaders().get(name)
   }
 }
 
@@ -63,6 +63,13 @@ class Response {
 
     if (CONTENT_LENGTH.test(name)) this._chunked = false
     else if (CONNECTION.test(name)) this._keepAlive = false
+  }
+
+  setHeaders (obj) {
+    const names = Object.keys(obj)
+    names.forEach(key => {
+      this.setHeader(key, obj[key])
+    })
   }
 
   _appendHeader (buf) {
