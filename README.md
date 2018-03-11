@@ -6,6 +6,8 @@ A low level http library for Node.js based on [turbo-net](https://github.com/maf
 npm install turbo-http
 ```
 
+[![build status](https://travis-ci.org/mafintosh/turbo-http.svg?branch=master)](https://travis-ci.org/mafintosh/turbo-http)
+
 WIP, this module is already *really* fast but there are some HTTP features
 missing and easy perf gains to be had :D :D :D
 
