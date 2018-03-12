@@ -32,8 +32,7 @@ class Request {
   }
 
   getHeader (name) {
-    name = name.toLowerCase()
-    return this.getAllHeaders().get(name)
+    return this.getAllHeaders().get(name.toLowerCase())
   }
 }
 
