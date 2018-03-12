@@ -66,6 +66,10 @@ Request url
 
 Request method
 
+#### `req.socket`
+
+Request socket
+
 #### `value = req.getHeader(name)`
 
 Get a request header.
