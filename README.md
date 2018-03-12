@@ -66,6 +66,10 @@ Request url
 
 Request method
 
+#### `req.socket`
+
+Request [turbo-net](https://github.com/mafintosh/turbo-net) socket
+
 #### `value = req.getHeader(name)`
 
 Get a request header.
