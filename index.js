@@ -14,16 +14,43 @@ const CONTENT_LENGTH = /^Content-Length$/i
 const CONNECTION = /^Connection$/i
 
 class Request {
-  constructor (socket, opts) {
-    this.method = HTTPParser.methods[opts.method]
-    this.url = opts.url
+  constructor (server, socket) {
+    this.server = server
     this.socket = socket
-
-    this._options = opts
     this._headers = null
+    this.onhead = null
+    if (!this.ondata) this.ondata = noop
+    if (!this.onend) this.onend = noop
 
-    this.ondata = noop
-    this.onend = noop
+    this._header_buf = server._alloc()
+    this._buf = server._alloc()
+
+    this.init()
+  }
+
+  init () {
+    const parser = new HTTPParser(HTTPParser.REQUEST)
+
+    const onhead = opts => {
+      this.method = HTTPParser.methods[opts.method]
+      this.url = opts.url
+      this._options = opts
+      this.onhead()
+    }
+
+    parser[HTTPParser.kOnHeadersComplete] = onhead
+    parser[HTTPParser.kOnBody] = (body, start, end) => this.ondata(body, start, end)
+    parser[HTTPParser.kOnMessageComplete] = () => this.onend()
+
+    const onread = (err, buf, read) => {
+      if (err || !read) return
+      parser.execute(buf, 0, read)
+      this.socket.read(buf, onread)
+    }
+
+    this.socket.read(this._buf, onread)
+
+    this.socket.on('close', () => this.server._pool.push(this._header_buf, this._buf))
   }
 
   getAllHeaders () {
@@ -37,12 +64,12 @@ class Request {
 }
 
 class Response {
-  constructor (server, socket, headers) {
+  constructor (server, socket, req) {
     this.socket = socket
     this.statusCode = 200
     this.headerSent = false
 
-    this._headers = headers
+    this._headers = req._header_buf
     this._headersLength = 0
     this._keepAlive = true
     this._chunked = true
@@ -274,44 +301,9 @@ class Server extends turbo.Server {
   }
 
   _onhttpconnection (socket) {
-    const self = this
-    const headers = this._alloc() // we are not pipelining (right?) so headers re-use is safe
-    const buf = this._alloc()
-    const parser = new HTTPParser(HTTPParser.REQUEST)
-
-    var req
-    var res
-
-    parser[HTTPParser.kOnHeadersComplete] = onhead
-    parser[HTTPParser.kOnBody] = onbody
-    parser[HTTPParser.kOnMessageComplete] = onend
-
-    socket.read(buf, onread)
-    socket.on('close', onclose)
-
-    function onhead (opts) {
-      req = new Request(socket, opts)
-      res = new Response(self, socket, headers)
-      self.emit('request', req, res)
-    }
-
-    function onbody (body, start, end) {
-      req.ondata(body, start, end)
-    }
-
-    function onend () {
-      req.onend()
-    }
-
-    function onclose () {
-      self._pool.push(headers, buf)
-    }
-
-    function onread (err, buf, read) {
-      if (err || !read) return
-      parser.execute(buf, 0, read)
-      socket.read(buf, onread)
-    }
+    const req = new Request(this, socket)
+    const res = new Response(this, socket, req)
+    req.onhead = () => this.emit('request', req, res)
   }
 
   _alloc () {
@@ -331,6 +323,10 @@ exports.createServer = function (opts, onrequest) {
   if (onrequest) server.on('request', onrequest)
   return server
 }
+
+exports.Request = Request
+exports.Response = Response
+exports.Server = Server
 
 function noop () {}
 
