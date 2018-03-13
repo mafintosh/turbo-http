@@ -302,7 +302,7 @@ class Server extends turbo.Server {
 
   _onhttpconnection (socket) {
     const req = new Request(this, socket)
-    const res = new Response(this, socket, res)
+    const res = new Response(this, socket, req)
     req.onhead = () => this.emit('request', req, res)
   }
 
