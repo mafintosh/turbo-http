@@ -98,6 +98,7 @@ class HttpParser {
       } else if (this.state === STATE_BODY) {
         this[HttpParser.kOnBody]()
         this[HttpParser.kOnMessageComplete]()
+        this.state = STATE_METHOD
         break
       }
     }
