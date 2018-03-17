@@ -1,6 +1,7 @@
 const turbo = require('turbo-net')
 const httpStatus = require('./http-status')
-const { HTTPParser } = require('http-parser-js')
+// const { HTTPParser } = require('http-parser-js')
+const HTTPParser = require('./parser')
 
 const SEP = ': '
 const EOL = '\r\n'
@@ -15,7 +16,7 @@ const CONNECTION = /^Connection$/i
 
 class Request {
   constructor (socket, opts) {
-    this.method = HTTPParser.methods[opts.method]
+    this.method = opts.method
     this.url = opts.url
     this.socket = socket
 
