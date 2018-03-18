@@ -4,8 +4,8 @@
   "description": "Blazing fast low level http server",
   "main": "index.js",
   "dependencies": {
-    "http-parser-js": "^0.4.10",
-    "turbo-net": "^1.2.1"
+    "http-parser-js": "^0.4.11",
+    "turbo-net": "^1.4.0"
   },
   "devDependencies": {
     "standard": "^11.0.0"
