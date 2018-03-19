@@ -95,4 +95,3 @@ tape('test headers with emoji unicode key', function (t) {
     })
   })
 })
-
