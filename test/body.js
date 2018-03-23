@@ -68,7 +68,7 @@ tape('test that no empty chunk is sent when the user explicitly sets a Transfer-
   })
 
   server.listen(0, function () {
-    const client = net.createConnection(server.address().port)
+    const client = net.connect(server.address().port)
 
     client.on('connect', function () {
       client.write('GET / HTTP/1.1\r\n\r\n')

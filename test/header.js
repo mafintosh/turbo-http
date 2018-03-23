@@ -11,7 +11,7 @@ tape('test headers with bad ending', function (t) {
   })
 
   server.listen(0, function () {
-    const client = net.createConnection(server.address().port)
+    const client = net.connect(server.address().port)
 
     client.on('connect', function () {
       client.write('GET /blah HTTP/1.1\r\n' +
@@ -47,7 +47,7 @@ tape('test headers with missing its key', function (t) {
   })
 
   server.listen(0, function () {
-    const client = net.createConnection(server.address().port)
+    const client = net.connect(server.address().port)
 
     client.on('connect', function () {
       client.write('GET /blah HTTP/1.1\r\n' +
@@ -72,7 +72,7 @@ tape('test headers with emoji unicode key', function (t) {
   })
 
   server.listen(0, function () {
-    const client = net.createConnection(server.address().port)
+    const client = net.connect(server.address().port)
 
     client.on('connect', function () {
       client.write('GET /blah HTTP/1.1\r\n' +
