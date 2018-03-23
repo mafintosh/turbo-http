@@ -5,7 +5,6 @@ const net = require('net')
 
 tape('test http head response response has no body', function (t) {
   const server = turbo.createServer(function (req, res) {
-    res.setHeader('Status', 200)
     res.write('FAIL')
   })
 
@@ -30,7 +29,6 @@ tape('test http head response response has no body', function (t) {
 
 tape('test http head response when req has no body', function (t) {
   const server = turbo.createServer(function (req, res) {
-    res.setHeader('Status', 200)
     res.write('')
   })
 
@@ -65,7 +63,6 @@ tape('test that no empty chunk is sent when the user explicitly sets a Transfer-
                     '有效的改善了岭南地区落后的政治、经济现状。'
 
   const server = turbo.createServer(function (req, res) {
-    res.setHeader('Status', 200)
     res.write(UTF8_STRING)
     res.end()
   })
