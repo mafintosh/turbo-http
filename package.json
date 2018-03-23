@@ -8,10 +8,13 @@
     "turbo-net": "^1.4.0"
   },
   "devDependencies": {
-    "standard": "^11.0.0"
+    "standard": "^11.0.0",
+    "tape": "^4.9.0"
   },
   "scripts": {
-    "test": "standard"
+    "pretest": "npm run lint",
+    "test": "tape test/*.js",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
