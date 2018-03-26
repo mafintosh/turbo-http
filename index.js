@@ -10,11 +10,12 @@ exports.createServer = function (opts, onrequest) {
   return server
 }
 
-exports.request = function (obj) {
+exports.request = function (obj, cb) {
   if (typeof obj !== 'object') return exports.request({
     host: obj
-  })
+  }, cb)
 
   const client = new Client(obj)
-  return client._connect()
+  client._connect(cb)
+  return client
 }
