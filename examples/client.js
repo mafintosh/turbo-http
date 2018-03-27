@@ -4,18 +4,17 @@ const http = require('http')
 const querystring = require('querystring')
 const postData = querystring.stringify({
   'msg': 'Hello World!'
-});
+})
 
 const server = http.createServer(function (request, response) {
-
-  let body = [];
+  let body = []
   request.on('data', (chunk) => {
-    body.push(chunk);
+    body.push(chunk)
   }).on('end', () => {
-    body = Buffer.concat(body).toString();
+    body = Buffer.concat(body).toString()
     console.log(`Server has body: ${body}`)
-    response.end(body);
-  });
+    response.end(body)
+  })
 })
 
 server.listen(0, function () {
@@ -28,18 +27,18 @@ server.listen(0, function () {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': Buffer.byteLength(postData)
     }
-  };
+  }
 
   const req = turbo.request(options, (res) => {
     res.on('data', (chunk) => {
-      console.log(`Client has response: ${chunk.toString()}`);
-    });
+      console.log(`Client has response: ${chunk.toString()}`)
+    })
     res.on('end', () => {
-      console.log('No more data in response.');
+      console.log('No more data in response.')
       req.end()
       server.close()
-    });
-  });
+    })
+  })
 
-  req.write(postData);
+  req.write(postData)
 })
