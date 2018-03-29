@@ -32,7 +32,7 @@ server.listen(0, function () {
   const req = turbo.request(options, (res) => {
     console.log(`content length of response from server is ${res.getHeader('content-length')}`)
     res.ondata = function (body, start, end) {
-      console.log(`data received from server: ${body.slice(start, start+end).toString()}`)
+      console.log(`data received from server: ${body.slice(start, start + end).toString()}`)
     }
 
     res.onend = function () {
