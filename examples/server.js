@@ -1,4 +1,4 @@
-const turbo = require('./')
+const turbo = require('../')
 
 const hello = Buffer.from('hello world\n')
 
