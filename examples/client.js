@@ -30,14 +30,15 @@ server.listen(0, function () {
   }
 
   const req = turbo.request(options, (res) => {
-    res.on('data', (chunk) => {
-      console.log(`Client has response: ${chunk.toString()}`)
-    })
-    res.on('end', () => {
-      console.log('No more data in response.')
+    console.log(`content length of response from server is ${res.getHeader('content-length')}`)
+    res.ondata = function (body, start, end) {
+      console.log(`data received from server: ${body.slice(start, start+end).toString()}`)
+    }
+
+    res.onend = function () {
       req.end()
       server.close()
-    })
+    }
   })
 
   const buf = Buffer.from(postData)
