@@ -40,5 +40,6 @@ server.listen(0, function () {
     })
   })
 
-  req.write(postData)
+  const buf = Buffer.from(postData)
+  req.write(buf, buf.length)
 })

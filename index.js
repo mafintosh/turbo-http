@@ -18,6 +18,5 @@ exports.request = function (obj, cb) {
   }
 
   const client = new Client(obj)
-  client._connect(cb)
-  return client
+  return client._connect(cb)
 }
