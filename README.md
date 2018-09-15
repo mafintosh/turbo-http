@@ -40,9 +40,28 @@ Emitted when a new http request is received.
 
 Set the http status
 
+#### `res.getHeader(name)`
+
+Get a http header
+
 #### `res.setHeader(name, value)`
 
 Set a http header
+
+#### `res.hasHeader(name)`
+
+Returns true if the header identified by name. Note that the header name matching is case-insensitive.
+
+#### `res.getHeaders()`
+
+Returns a shallow copy of the current outgoing headers.
+
+#### `res.writeHead(statusCode[, statusMessage][, headers])`
+
+Set a response header to the request. The status code is a 3-digit
+HTTP status code, like 404. The last argument, `headers`, are the
+response headers. Optionally one can give a human-readable
+`statusMessage` as the second argument.
 
 #### `res.write(buf, [length], [callback])`
 
@@ -77,6 +96,10 @@ Get a request header.
 #### `headers = req.getAllHeaders()`
 
 Get all request headers as a map.
+
+#### `headers = req.headers`
+
+Get all request headers as an object.
 
 #### `req.ondata(buffer, start, length)`
 

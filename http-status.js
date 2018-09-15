@@ -1,4 +1,5 @@
-const status = module.exports = new Array(512)
+const status = new Array(512)
+const statusMessage = new Array(512)
 
 set(100, 'Continue')
 set(101, 'Switching Protocols')
@@ -65,5 +66,14 @@ set(510, 'Not Extended')
 set(511, 'Network Authentication Required')
 
 function set (code, msg) {
-  status[code] = Buffer.from('HTTP/1.1 ' + code + ' ' + msg + '\r\n')
+  status[code] = createHttpStatus(code, msg)
+  statusMessage[code] = msg
 }
+
+function createHttpStatus (code, msg) {
+  return Buffer.from('HTTP/1.1 ' + code + ' ' + msg + '\r\n')
+}
+
+exports.createHttpStatus = createHttpStatus
+exports.httpStatus = status
+exports.httpStatusMessage = statusMessage
