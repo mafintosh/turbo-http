@@ -95,7 +95,7 @@ Get a request header.
 
 #### `headers = req.getAllHeaders()`
 
-Get all request headers as an object.
+Get all request headers as a map.
 
 #### `headers = req.headers`
 
