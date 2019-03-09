@@ -1,0 +1,1 @@
+require('../cluster')(() => require('./restana'))
