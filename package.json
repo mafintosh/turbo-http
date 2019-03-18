@@ -1,6 +1,6 @@
 {
   "name": "turbo-http",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Blazing fast low level http server",
   "main": "index.js",
   "dependencies": {
